@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# 🎪 Festival Radar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Eine interaktive Webanwendung, mit der du Musikfestivals in deiner Nähe entdecken kannst. Gib einfach deine Postleitzahl ein und sieh auf der Karte, welche Festivals im gewünschten Umkreis stattfinden.
 
-Currently, two official plugins are available:
+![Festival Radar Screenshot](https://github.com/user-attachments/assets/1ad9d62e-5259-48a8-ba70-23b309671ca9)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **📍 Standortsuche per PLZ** – Gib deine Postleitzahl ein; die Karte springt direkt auf deinen Standort (Geocoding via OpenStreetMap Nominatim)
+- **🗺️ Interaktive Karte** – Alle Festivals werden als Marker auf einer Leaflet-Karte angezeigt; ein Radius-Kreis visualisiert den Suchbereich
+- **⚙️ Filter-Optionen** – Klappbares Filter-Menü mit:
+  - Radius-Schieberegler + Schnellauswahl (25 – 500 km)
+  - Zeitraum-Filter (nächste 2 Wochen bis 1 Jahr)
+- **📋 Festival-Liste** – Ergebnisse sortiert nach Entfernung und Datum mit Distanz-Badge, Countdown, Genre-Tags und Website-Link
+- **📱 Responsiv** – Optimiert für Desktop (Karte + Seitenspalte) und Mobile (gestapeltes Layout)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Datensatz
 
-## Expanding the ESLint configuration
+Die App enthält 25 echte deutsche Musikfestivals (Rock am Ring, Wacken Open Air, Hurricane, Lollapalooza Berlin, Melt!, Fusion, Nature One u.v.m.).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Technologie | Version |
+|---|---|
+| React | 19 |
+| TypeScript | 6 |
+| Vite | 8 |
+| Leaflet | 1.9 |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Lokale Entwicklung
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Abhängigkeiten installieren
+npm install
+
+# Entwicklungsserver starten
+npm run dev
+
+# Produktions-Build erstellen
+npm run build
+
+# Lint prüfen
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Der Dev-Server läuft dann unter `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Projektstruktur
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── components/
+│   ├── Map.tsx          # Leaflet-Karte mit Markern und Radius-Kreis
+│   ├── FilterPanel.tsx  # Filter-Optionen (Radius + Zeitraum)
+│   └── FestivalList.tsx # Festival-Karten-Liste
+├── data/
+│   └── festivals.ts     # Datensatz mit 25 deutschen Festivals
+├── utils/
+│   └── geo.ts           # Haversine-Formel, PLZ-Geocoding, Datumshelfer
+├── types.ts             # TypeScript-Typen
+├── App.tsx              # Haupt-Komponente
+└── App.css              # Styles
 ```
