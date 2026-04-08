@@ -103,9 +103,17 @@ function haversine(lat1, lng1, lat2, lng2) {
 }
 
 /* ── Date helpers ────────────────────────────────────────────── */
+function parseDate(dateStr) {
+    return new Date(dateStr + 'T00:00:00');
+}
+
+function parseDateEnd(dateStr) {
+    return new Date(dateStr + 'T23:59:59');
+}
+
 function formatDateRange(start, end) {
-    const s = new Date(start + 'T00:00:00');
-    const e = new Date(end   + 'T00:00:00');
+    const s = parseDate(start);
+    const e = parseDate(end);
     const fmt = d => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
     if (start === end) return fmt(s);
     if (s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear()) {
@@ -129,25 +137,19 @@ function filterFestivals() {
     const horizon = new Date(now.getTime() + weeks * 7 * 24 * 3600 * 1000);
 
     return FESTIVALS
+        .map(f => ({ ...f, distance: Math.round(haversine(userCoords.lat, userCoords.lng, f.lat, f.lng)) }))
         .filter(f => {
             // Distance
-            const dist = haversine(userCoords.lat, userCoords.lng, f.lat, f.lng);
-            if (dist > radius) return false;
+            if (f.distance > radius) return false;
 
             // Time window: festival hasn't fully ended before now, and starts before horizon
-            const festEnd   = new Date(f.endDate   + 'T23:59:59');
-            const festStart = new Date(f.startDate + 'T00:00:00');
-            if (festEnd < now || festStart > horizon) return false;
+            if (parseDateEnd(f.endDate) < now || parseDate(f.startDate) > horizon) return false;
 
             // Genre
             if (!f.genres.some(g => selectedGenres.includes(g))) return false;
 
             return true;
         })
-        .map(f => ({
-            ...f,
-            distance: Math.round(haversine(userCoords.lat, userCoords.lng, f.lat, f.lng))
-        }))
         .sort((a, b) => a.distance - b.distance);
 }
 
