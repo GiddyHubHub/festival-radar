@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Festival Radar – Postleitzahl eingeben und alle Festivals im Umkreis finden.">
+    <title>Festival Radar 🎪</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="anonymous"
+    >
+    <!-- App styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header class="site-header">
+    <div class="header-content">
+        <div class="header-logo" aria-hidden="true">🎪</div>
+        <h1>Festival Radar</h1>
+        <p>Gib deine Postleitzahl ein und entdecke Festivals in deiner Nähe</p>
+    </div>
+</header>
+
+<main>
+
+    <!-- ── Search ─────────────────────────────────────────────── -->
+    <section class="search-section" aria-label="Suche">
+        <div class="search-wrap">
+            <div class="search-bar">
+                <div class="input-wrapper">
+                    <span class="input-icon" aria-hidden="true">📬</span>
+                    <input
+                        type="text"
+                        id="plz-input"
+                        placeholder="Postleitzahl (z. B. 10115)"
+                        maxlength="5"
+                        inputmode="numeric"
+                        autocomplete="postal-code"
+                        aria-label="Postleitzahl"
+                    >
+                </div>
+                <button id="search-btn" aria-label="Festivals finden">
+                    <span class="btn-text">Festivals finden</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Filters ────────────────────────────────────────────── -->
+    <section class="options-section" aria-label="Filter">
+        <div class="options-header">
+            <h2>🎛 Filter</h2>
+            <button
+                class="toggle-options"
+                id="toggle-options"
+                aria-expanded="true"
+                aria-controls="options-grid"
+            >Ausblenden ▲</button>
+        </div>
+
+        <div class="options-grid" id="options-grid">
+
+            <!-- Radius -->
+            <div class="option-group">
+                <label for="radius-slider">
+                    Umkreis: <strong id="radius-value">100</strong> km
+                </label>
+                <input
+                    type="range"
+                    id="radius-slider"
+                    min="10"
+                    max="500"
+                    value="100"
+                    step="10"
+                    aria-label="Radius in Kilometern"
+                >
+                <div class="slider-labels" aria-hidden="true">
+                    <span>10 km</span>
+                    <span>250 km</span>
+                    <span>500 km</span>
+                </div>
+            </div>
+
+            <!-- Time range -->
+            <div class="option-group">
+                <label for="time-filter">Zeitraum</label>
+                <select id="time-filter" aria-label="Zeitraum">
+                    <option value="2">Nächste 2 Wochen</option>
+                    <option value="4">Nächste 4 Wochen</option>
+                    <option value="8" selected>Nächste 8 Wochen</option>
+                    <option value="12">Nächste 3 Monate</option>
+                    <option value="26">Nächste 6 Monate</option>
+                    <option value="52">Nächstes Jahr</option>
+                </select>
+            </div>
+
+            <!-- Genres -->
+            <div class="option-group option-group--genres">
+                <div class="genre-label-row">
+                    <label>Genres</label>
+                    <div class="genre-actions">
+                        <button class="link-btn" id="select-all-genres">Alle</button>
+                        <span class="separator" aria-hidden="true">·</span>
+                        <button class="link-btn" id="deselect-all-genres">Keine</button>
+                    </div>
+                </div>
+                <div class="genre-filters" id="genre-filters" role="group" aria-label="Genre-Filter"></div>
+            </div>
+
+        </div><!-- /.options-grid -->
+    </section>
+
+    <!-- ── Results ────────────────────────────────────────────── -->
+    <section class="results-section" id="results-section" hidden aria-label="Ergebnisse">
+        <div class="results-header">
+            <h2 id="results-title" aria-live="polite">Lade…</h2>
+        </div>
+
+        <!-- Map -->
+        <div id="map" class="map-container" aria-label="Karte mit Festivals" role="region"></div>
+
+        <!-- Festival cards -->
+        <div id="festival-grid" class="festival-grid"></div>
+    </section>
+
+</main>
+
+<!-- ── Footer ──────────────────────────────────────────────── -->
+<footer class="site-footer">
+    <p>
+        Festival Radar &nbsp;·&nbsp;
+        Kartendaten © <a href="https://openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>
+        &nbsp;·&nbsp; Geocoding by <a href="https://nominatim.org" target="_blank" rel="noopener noreferrer">Nominatim</a>
+        &nbsp;·&nbsp; Festivalangaben ohne Gewähr
+    </p>
+</footer>
+
+<!-- Leaflet JS -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLs="
+    crossorigin="anonymous"
+></script>
+<!-- Festival data -->
+<script src="js/festivals.js"></script>
+<!-- App logic -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
